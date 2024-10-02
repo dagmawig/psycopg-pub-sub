@@ -11,6 +11,8 @@ load_dotenv()
 async def fetch(connection_str: str, channel: str, start_date: str, end_date=datetime.today().strftime('%Y-%m-%d'), **kwargs):
     
     con = await psycopg.AsyncConnection.connect(connection_str)
+
+    # used to get row in dict form with column name as key
     cur = con.cursor(row_factory=dict_row)
 
     # build the filter sql string
@@ -28,6 +30,3 @@ async def fetch(connection_str: str, channel: str, start_date: str, end_date=dat
 
     await cur.close()
     return rows
-    
-# asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-# asyncio.run(fetch(connection_str=os.environ.get('CONNECTION_URL'), channel='news', start_date='2024-09-23', name='DAG'))
