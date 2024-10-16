@@ -10,7 +10,10 @@ async def publish(connection_str: str, channel: str, data: dict):
 
     try:
         con = await psycopg.AsyncConnection.connect(connection_str)
-
+    except:
+        print('Connection error! Make sure CONNECTION_URL variable is set.')
+        return
+    try:
         # used to get row in dict form with column name as key
         cur = con.cursor(row_factory=dict_row)
 
@@ -32,5 +35,5 @@ async def publish(connection_str: str, channel: str, data: dict):
         print(f"publish success! message id: {id}")
     except:
         print('publish error!')
-        
+        return
     return row

@@ -4,10 +4,12 @@ from datetime import datetime
 
 # this function fetches messages from the message table
 async def fetch(connection_str: str, channel: str, start_date: str, end_date=datetime.today().strftime('%Y-%m-%d'), **kwargs):
-    
     try:
         con = await psycopg.AsyncConnection.connect(connection_str)
-
+    except:
+        print('Connection error! Make sure CONNECTION_URL variable is set.')
+        return
+    try:
         # used to get row in dict form with column name as key
         cur = con.cursor(row_factory=dict_row)
 
@@ -27,5 +29,5 @@ async def fetch(connection_str: str, channel: str, start_date: str, end_date=dat
         await cur.close()
     except:
         print('fetch error!')
-        
+
     return rows
